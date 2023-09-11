@@ -12,7 +12,11 @@ export async function validateUser(email: string, password: string) {
     if (!isValidPassword) {
       return false;
     }
-    return omit(user.toJSON(), "password");
+    const userToBeReturn = await user.populate({
+      path: "role",
+      populate: { path: "permissions" },
+    });
+    return omit(userToBeReturn.toJSON(), "password");
   } catch (error) {
     return false;
   }

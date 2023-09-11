@@ -7,12 +7,20 @@ import {
 } from "../controllers/item-category.controller";
 import { validate } from "../middlewares/validateResources";
 import { itemCategorySchema } from "../schema/item-category.schema";
+import { Func, validateAuthority } from "../middlewares/validateAuthority";
 
 const itemCategoryRouter = Router();
 
-itemCategoryRouter.get("/", getItemCategoriesHandler);
+const funcName = "item";
+
+itemCategoryRouter.get(
+  "/",
+  validateAuthority(funcName, Func.Read),
+  getItemCategoriesHandler
+);
 itemCategoryRouter.post(
   "/",
+  validateAuthority(funcName, Func.Create),
   validate(itemCategorySchema),
   createItemCategoryHandler
 );

@@ -17,13 +17,7 @@ export async function registerHandler(
       return res.status(409).json({ message: "User already exist" });
     }
     const createdUser = await createUser(req.body);
-    const accessToken = signJwt(createdUser, {
-      expiresIn: config.get<string>("accessTokenTtl"),
-    });
-    const refreshToken = signJwt(createdUser, {
-      expiresIn: config.get<string>("refreshTokenTtl"),
-    });
-    return res.status(201).json({ accessToken, refreshToken });
+    return res.status(201).json(createdUser);
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
   }
