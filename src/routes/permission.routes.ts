@@ -2,9 +2,10 @@ import { Router } from "express";
 import {
   createPermissionHandler,
   getPermissionHandler,
+  updatePermissionHandler,
 } from "../controllers/permission.controller";
 import { validate } from "../middlewares/validateResources";
-import { createPermissionSchema } from "../schema/permission.schema";
+import { createPermissionSchema, updatePermissionSchema } from "../schema/permission.schema";
 
 const permissionRouter = Router();
 
@@ -15,5 +16,7 @@ permissionRouter.post(
 );
 
 permissionRouter.get("/", getPermissionHandler);
+
+permissionRouter.put("/:_id", validate(updatePermissionSchema), updatePermissionHandler);
 
 export default permissionRouter;
