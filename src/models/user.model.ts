@@ -52,7 +52,22 @@ userSchema.pre("save", async function (next) {
   }
 
   const salt = await bcrypt.genSalt(config.get<number>("saltWorkFactor"));
-  const hash = await bcrypt.hashSync(user.password, salt);
+  const hash = bcrypt.hashSync(user.password, salt);
+
+  user.password = hash;
+
+  return next();
+});
+
+userSchema.pre("findOneAndUpdate", async function (next) {
+  let user = this.getUpdate() as UserDocument;
+  console.log(user);
+  if (!user.password) {
+    return next();
+  }
+
+  const salt = await bcrypt.genSalt(config.get<number>("saltWorkFactor"));
+  const hash = bcrypt.hashSync(user.password, salt);
 
   user.password = hash;
 

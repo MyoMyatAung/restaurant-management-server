@@ -6,6 +6,7 @@ import { requiredUser } from "./middlewares/requiredUser";
 import orderRouter from "./routes/order.routes";
 import permissionRouter from "./routes/permission.routes";
 import roleRouter from "./routes/role.routes";
+import userRouter from "./routes/user.routes";
 
 function routes(app: Express) {
   app.get("/health-check", (req: Request, res: Response) => {
@@ -13,6 +14,7 @@ function routes(app: Express) {
   });
 
   app.use("/api/v1/auth", authRouter);
+  app.use("/api/v1/users", requiredUser, userRouter);
   app.use("/api/v1/items", requiredUser, itemRouter);
   app.use("/api/v1/item-categories", requiredUser, itemCategoryRouter);
   app.use("/api/v1/orders", requiredUser, orderRouter);

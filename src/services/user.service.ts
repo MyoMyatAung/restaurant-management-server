@@ -1,6 +1,6 @@
 import { omit } from "lodash";
 import UserModel, { UserDocument, UserInput } from "../models/user.model";
-import { FilterQuery, QueryOptions } from "mongoose";
+import { FilterQuery, QueryOptions, UpdateQuery } from "mongoose";
 
 export async function validateUser(email: string, password: string) {
   try {
@@ -29,6 +29,14 @@ export async function createUser(input: UserInput) {
   } catch (error: any) {
     throw new Error(error);
   }
+}
+
+export async function updateUser(
+  query: FilterQuery<UserDocument>,
+  update: UpdateQuery<UserDocument>,
+  options: QueryOptions = { new: true }
+) {
+  return UserModel.findOneAndUpdate(query, update, options);
 }
 
 export async function findUser(
