@@ -6,9 +6,9 @@ import {
   updateItemHandler,
 } from "../controllers/item.controller";
 import upload from "../utils/multer.utils";
-import { validate } from "../middlewares/validateResources";
-import { itemSchema } from "../schema/item.schema";
+import { validate, validateFormData } from "../middlewares/validateResources";
 import { Func, validateAuthority } from "../middlewares/validateAuthority";
+import { createItemSchema, updateItemSchema } from "../schema/item.schema";
 
 const itemRouter = Router();
 
@@ -18,11 +18,17 @@ itemRouter.post(
   "/",
   validateAuthority(funcName, Func.Create),
   upload.array("imgs"),
-  validate(itemSchema),
+  validateFormData(createItemSchema),
   createItemHandler
 );
 itemRouter.get("/", validateAuthority(funcName, Func.Read), getItemsHandler);
-itemRouter.put("/:id", updateItemHandler);
-itemRouter.delete("/:id", deleteItemHandler);
+itemRouter.put(
+  "/:_id",
+  validateAuthority(funcName, Func.Update),
+  upload.array("imgs"),
+  validateFormData(updateItemSchema),
+  updateItemHandler
+);
+itemRouter.delete("/:_id", deleteItemHandler);
 
 export default itemRouter;

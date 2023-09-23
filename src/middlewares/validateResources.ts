@@ -13,6 +13,22 @@ export const validate =
       });
       next();
     } catch (error: any) {
-      return res.status(400).json({message: error.issues[0]});
+      return res.status(400).json({ message: error.issues[0] });
+    }
+  };
+
+export const validateFormData =
+  (schema: AnyZodObject) =>
+  (req: Request, res: Response, next: NextFunction) => {
+    try {
+      schema.safeParse({
+        body: req.body,
+        query: req.query,
+        params: req.params,
+        files: req.files,
+      });
+      next();
+    } catch (error: any) {
+      return res.status(400).json({ message: error.issues[0] });
     }
   };
