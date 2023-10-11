@@ -5,11 +5,14 @@ import {
 } from "../controllers/order.controller";
 import { validate } from "../middlewares/validateResources";
 import { orderSchema } from "../schema/order.schema";
+import { Func, funName, validateAuthority } from "../middlewares/validateAuthority";
+
+const funcName = funName.order.key
 
 const orderRouter = Router();
 
-orderRouter.post("/", validate(orderSchema), createOrderHandler);
+orderRouter.post("/", validateAuthority(funcName, Func.Create), validate(orderSchema), createOrderHandler);
 
-orderRouter.get("/", getOrderHandler);
+orderRouter.get("/", validateAuthority(funcName, Func.Read), getOrderHandler);
 
 export default orderRouter;

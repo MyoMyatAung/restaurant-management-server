@@ -16,26 +16,53 @@ export enum Func {
   Delete = "delete",
 }
 
+export const funName = {
+  order: {
+    key: "order",
+    label: "Order",
+  },
+  item: {
+    key: "item",
+    label: "Item",
+  },
+  item_category: {
+    key: "item-category",
+    label: "Item Category",
+  },
+  user: {
+    key: "user",
+    label: "User",
+  },
+  role: {
+    key: "role",
+    label: "Role",
+  },
+  permission: {
+    key: "permission",
+    label: "Permission",
+  }
+}
+
 export const validateAuthority =
   (feat: string, func: Func) =>
-  (req: Request, res: Response, next: NextFunction) => {
-    // res.locals.user came from deserializeUser
-    const permissions = res.locals.user.role
-      .permissions as Array<PermissionDocument>; // The permission of the role of user
-    const customPermission = res.locals.user
-      .customPermission as Array<PermissionDocument>; // Custom permission of the user
+    (req: Request, res: Response, next: NextFunction) => {
+      // res.locals.user came from deserializeUser
+      const permissions = res.locals.user.role
+        .permissions as Array<PermissionDocument>; // The permission of the role of user
+      const customPermission = res.locals.user
+        .customPermission as Array<PermissionDocument>; // Custom permission of the user
 
-    const isGranted: boolean = Boolean(
-      permissions.filter((p) => p.feature === feat && p.granted[func] === true)
-        .length ||
+      const isGranted: boolean = Boolean(
+        permissions.filter((p) => p.feature === feat && p.granted[func] === true)
+          .length ||
         customPermission.filter(
           (p) => p.feature === feat && p.granted[func] === true
         ).length
-    ); // Check if the user is granted or not
+      ); // Check if the user is granted or not
 
-    if (!isGranted) {
-      return res.status(403).json({ message: "Forbidden" });
-    }
+      if (!isGranted) {
+        return res.status(403).json({ message: "Forbidden" });
+      }
 
-    return next();
-  };
+      return next();
+    };

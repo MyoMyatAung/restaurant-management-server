@@ -7,12 +7,12 @@ import {
 } from "../controllers/item.controller";
 import upload from "../utils/multer.utils";
 import { validate, validateFormData } from "../middlewares/validateResources";
-import { Func, validateAuthority } from "../middlewares/validateAuthority";
+import { Func, funName, validateAuthority } from "../middlewares/validateAuthority";
 import { createItemSchema, updateItemSchema } from "../schema/item.schema";
 
 const itemRouter = Router();
 
-const funcName = "item";
+const funcName = funName.item.key;
 
 itemRouter.post(
   "/",
